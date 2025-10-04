@@ -45,3 +45,7 @@ function getTeamIdByAbbr(abbr: string): number {
   };
   return map[abbr] || 0;
 }
+
+export function getHeadshot(personId: number) {
+  return `https://cdn.nba.com/headshots/nba/latest/1040x760/${personId}.png`;
+}
