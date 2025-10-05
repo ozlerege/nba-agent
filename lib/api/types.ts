@@ -61,3 +61,82 @@ export interface TeamGameScheduleResponse {
   previous: TeamGame[];
   upcoming: TeamGame[];
 }
+
+export interface TeamStatsApiResponse {
+  TEAM_ID: number;
+  TEAM_CITY: string;
+  TEAM_NAME: string;
+  YEAR: string;
+  GP: number;
+  MIN: number;
+  WINS: number;
+  LOSSES: number;
+  WIN_PCT: number;
+  CONF_RANK: number;
+  DIV_RANK: number;
+  PO_WINS: number;
+  PO_LOSSES: number;
+  CONF_COUNT: number;
+  DIV_COUNT: number;
+  NBA_FINALS_APPEARANCE: number;
+  FGM: number;
+  FGA: number;
+  FG_PCT: number;
+  FG3M: number;
+  FG3A: number;
+  FG3_PCT: number;
+  FTM: number;
+  FTA: number;
+  FT_PCT: number;
+  OREB: number;
+  DREB: number;
+  REB: number;
+  AST: number;
+  PF: number;
+  STL: number;
+  TOV: number;
+  BLK: number;
+  PTS: number;
+  PTS_RANK: number;
+  PLUS_MINUS: number;
+}
+
+export interface TeamStats {
+  teamId: number;
+  teamCity: string;
+  teamName: string;
+  year: string;
+  seasonStartYear: number;
+  gp: number;
+  min: number;
+  wins: number;
+  losses: number;
+  winPct: number;
+  confRank: number;
+  divRank: number;
+  poWins: number;
+  poLosses: number;
+  confCount: number;
+  divCount: number;
+  nbaFinalsAppearance: number;
+  fgm: number;
+  fga: number;
+  fgPct: number;
+  fg3m: number;
+  fg3a: number;
+  fg3Pct: number;
+  ftm: number;
+  fta: number;
+  ftPct: number;
+  oreb: number;
+  dreb: number;
+  reb: number;
+  ast: number;
+  pf: number;
+  stl: number;
+  tov: number;
+  blk: number;
+  pts: number;
+  ptsRank: number;
+  plusMinus: number;
+}
