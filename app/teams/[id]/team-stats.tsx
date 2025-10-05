@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { DataCard } from "@/components/ui/data-card";
 import { SeasonFilter } from "@/components/ui/season-filter";
+import { TeamSummaryCards } from "@/components/ui/team-summary-cards";
 import { TeamsApi } from "@/lib/api/endpoints/teams";
 import type { TeamStats as TeamStatsModel } from "@/lib/api/types";
 import { TeamStatsTable } from "../team-stats-table";
@@ -99,7 +100,8 @@ export function TeamStats({ teamId }: { teamId: number }) {
               </p>
             )}
           </div>
-          <div className="mt-4">
+          <div className="mt-4 space-y-4">
+            <TeamSummaryCards teamStats={filteredStats} />
             <TeamStatsTable teamStats={filteredStats} />
           </div>
         </>

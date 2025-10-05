@@ -7,7 +7,7 @@ import { DataCard } from "@/components/ui/data-card";
 import { TeamsApi } from "@/lib/api/endpoints/teams";
 import { Team } from "@/lib/api/types";
 
-import { TeamsTable } from "./teams-table";
+import { TeamsTable } from "@/components/ui/teams-table";
 
 export function TeamsList() {
   const {

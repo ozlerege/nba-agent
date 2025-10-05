@@ -2,8 +2,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { DataCard } from "@/components/ui/data-card";
 import { TeamsApi } from "@/lib/api/endpoints/teams";
-import { RosterTable } from "../roster-table";
-import { StaffTable } from "../staff-table";
+import { RosterTable } from "@/components/ui/roster-table";
+import { StaffTable } from "@/components/ui/staff-table";
 
 export function TeamDetail({ teamId }: { teamId: number }) {
   const {

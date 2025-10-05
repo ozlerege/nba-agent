@@ -5,7 +5,7 @@ import { TeamSchedule } from "./team-schedule";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { TeamsApi } from "@/lib/api/endpoints/teams";
-import { TeamLogo } from "../team-logo";
+import { TeamLogo } from "@/components/ui/team-logo";
 import { TeamStats } from "./team-stats";
 
 export function TeamPageSetup() {

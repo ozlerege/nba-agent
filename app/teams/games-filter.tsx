@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { SeasonFilter } from "@/components/ui/season-filter";
 import { MonthFilter } from "@/components/ui/month-filter";
 import { SeasonType } from "@/lib/enums";
-import { GamesTable } from "./games-table";
+import { GamesTable } from "@/components/ui/games-table";
 import { TeamGameScheduleResponse } from "@/lib/api/types";
 
 export function GamesFilter({

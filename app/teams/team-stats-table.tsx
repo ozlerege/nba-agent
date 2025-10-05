@@ -12,6 +12,7 @@ import {
   formatDecimal,
   formatInteger,
   formatPlusMinus,
+  formatPerGame,
 } from "@/lib/formatters";
 
 export function TeamStatsTable({ teamStats }: { teamStats: TeamStats[] }) {
@@ -55,58 +56,58 @@ export function TeamStatsTable({ teamStats }: { teamStats: TeamStats[] }) {
                 {formatDecimal(stat.min)}
               </TableCell>
               <TableCell className="text-right">
-                {formatDecimal(stat.pts)}
+                {formatPerGame(stat.pts, stat.gp)}
               </TableCell>
               <TableCell className="text-right">
-                {formatInteger(stat.fgm)}
+                {formatPerGame(stat.fgm, stat.gp)}
               </TableCell>
               <TableCell className="text-right">
-                {formatInteger(stat.fga)}
+                {formatPerGame(stat.fga, stat.gp)}
               </TableCell>
               <TableCell className="text-right">
                 {formatPercent(stat.fgPct)}
               </TableCell>
               <TableCell className="text-right">
-                {formatInteger(stat.fg3m)}
+                {formatPerGame(stat.fg3m, stat.gp)}
               </TableCell>
               <TableCell className="text-right">
-                {formatInteger(stat.fg3a)}
+                {formatPerGame(stat.fg3a, stat.gp)}
               </TableCell>
               <TableCell className="text-right">
                 {formatPercent(stat.fg3Pct)}
               </TableCell>
               <TableCell className="text-right">
-                {formatInteger(stat.ftm)}
+                {formatPerGame(stat.ftm, stat.gp)}
               </TableCell>
               <TableCell className="text-right">
-                {formatInteger(stat.fta)}
+                {formatPerGame(stat.fta, stat.gp)}
               </TableCell>
               <TableCell className="text-right">
                 {formatPercent(stat.ftPct)}
               </TableCell>
               <TableCell className="text-right">
-                {formatDecimal(stat.oreb / stat.gp)}
+                {formatPerGame(stat.oreb, stat.gp)}
               </TableCell>
               <TableCell className="text-right">
-                {formatDecimal(stat.dreb / stat.gp)}
+                {formatPerGame(stat.dreb, stat.gp)}
               </TableCell>
               <TableCell className="text-right">
-                {formatDecimal(stat.reb / stat.gp)}
+                {formatPerGame(stat.reb, stat.gp)}
               </TableCell>
               <TableCell className="text-right">
-                {formatDecimal(stat.ast / stat.gp)}
+                {formatPerGame(stat.ast, stat.gp)}
               </TableCell>
               <TableCell className="text-right">
-                {formatDecimal(stat.tov / stat.gp)}
+                {formatPerGame(stat.tov, stat.gp)}
               </TableCell>
               <TableCell className="text-right">
-                {formatDecimal(stat.stl / stat.gp)}
+                {formatPerGame(stat.stl, stat.gp)}
               </TableCell>
               <TableCell className="text-right">
-                {formatDecimal(stat.blk / stat.gp)}
+                {formatPerGame(stat.blk, stat.gp)}
               </TableCell>
               <TableCell className="text-right">
-                {formatDecimal(stat.pf / stat.gp)}
+                {formatPerGame(stat.pf, stat.gp)}
               </TableCell>
               <TableCell className="text-right">
                 {formatPlusMinus(stat.plusMinus)}

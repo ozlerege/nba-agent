@@ -7,8 +7,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { EmptyState } from "@/components/ui/empty-state";
+import { TeamLogo } from "@/components/ui/team-logo";
 import { TeamGame } from "@/lib/api/types";
-import { TeamLogo } from "./team-logo";
 
 interface GamesTableProps {
   title: string;
