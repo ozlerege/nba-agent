@@ -2,8 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { ApiCallPrior } from "@/components/ui/apiCallPrior";
-import { Card, CardTitle, CardHeader, CardContent } from "@/components/ui/card";
+import { DataCard } from "@/components/ui/data-card";
+import { SeasonFilter } from "@/components/ui/season-filter";
 import { TeamsApi } from "@/lib/api/endpoints/teams";
 import type { TeamStats as TeamStatsModel } from "@/lib/api/types";
 import { TeamStatsTable } from "../team-stats-table";
@@ -76,56 +76,34 @@ export function TeamStats({ teamId }: { teamId: number }) {
       : "";
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Stats</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <ApiCallPrior loading={isLoading} error={errorMessage} />
+    <DataCard title="Stats" isLoading={isLoading} error={errorMessage}>
+      {!hasData && (
+        <p className="text-sm text-muted-foreground">
+          No historical stats available for this team.
+        </p>
+      )}
 
-        {!isLoading && !error && !hasData && (
-          <p className="text-sm text-muted-foreground">
-            No historical stats available for this team.
-          </p>
-        )}
-
-        {!isLoading && !error && hasData && (
-          <>
-            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between">
-              <div>
-                <label
-                  className="text-sm font-medium"
-                  htmlFor="team-stats-season"
-                >
-                  Season
-                </label>
-                <select
-                  id="team-stats-season"
-                  value={selectedSeason ?? ""}
-                  onChange={(event) =>
-                    setSelectedSeason(event.target.value || undefined)
-                  }
-                  className="flex h-9 w-full items-center justify-between rounded-md border border-input bg-transparent px-3 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  {seasonOptions.map((season) => (
-                    <option key={season} value={season}>
-                      {season}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              {selectedSeason && (
-                <p className="text-sm text-muted-foreground">
-                  Showing {selectedSeason} season performance.
-                </p>
-              )}
-            </div>
-            <div className="mt-4">
-              <TeamStatsTable teamStats={filteredStats} />
-            </div>
-          </>
-        )}
-      </CardContent>
-    </Card>
+      {hasData && (
+        <>
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between">
+            <SeasonFilter
+              selectedSeason={selectedSeason}
+              setSelectedSeason={setSelectedSeason}
+              seasonOptions={seasonOptions}
+              id="team-stats-season"
+              className="sm:max-w-xs"
+            />
+            {selectedSeason && (
+              <p className="text-sm text-muted-foreground">
+                Showing {selectedSeason} season performance.
+              </p>
+            )}
+          </div>
+          <div className="mt-4">
+            <TeamStatsTable teamStats={filteredStats} />
+          </div>
+        </>
+      )}
+    </DataCard>
   );
 }

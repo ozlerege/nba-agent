@@ -1,5 +1,7 @@
 import { ApiCallPrior } from "@/components/ui/apiCallPrior";
 import { Button } from "@/components/ui/button";
+import { SeasonFilter } from "@/components/ui/season-filter";
+import { MonthFilter } from "@/components/ui/month-filter";
 import { SeasonType } from "@/lib/enums";
 import { GamesTable } from "./games-table";
 import { TeamGameScheduleResponse } from "@/lib/api/types";
@@ -36,47 +38,18 @@ export function GamesFilter({
   return (
     <div>
       <div className="grid gap-3 md:grid-cols-4">
-        <div className="space-y-1">
-          <label className="text-sm font-medium" htmlFor="schedule-season">
-            Season
-          </label>
-          <select
-            id="schedule-season"
-            value={selectedSeason || ""}
-            onChange={(event) =>
-              setSelectedSeason(event.target.value || undefined)
-            }
-            className="flex h-9 w-full items-center justify-between rounded-md border border-input bg-transparent px-3 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {seasonOptions.map((season) => (
-              <option key={season} value={season}>
-                {season}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="space-y-1">
-          <label className="text-sm font-medium" htmlFor="schedule-month">
-            Month
-          </label>
-          <select
-            id="schedule-month"
-            value={selectedMonth}
-            onChange={(event) =>
-              setSelectedMonth(
-                event.target.value ? Number(event.target.value) : undefined
-              )
-            }
-            className="flex h-9 w-full items-center justify-between rounded-md border border-input bg-transparent px-3 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            <option value="">All months</option>
-            {monthOptions.map((month: { value: number; label: string }) => (
-              <option key={month.value} value={month.value}>
-                {month.label}
-              </option>
-            ))}
-          </select>
-        </div>
+        <SeasonFilter
+          selectedSeason={selectedSeason}
+          setSelectedSeason={setSelectedSeason}
+          seasonOptions={seasonOptions}
+          id="schedule-season"
+        />
+        <MonthFilter
+          selectedMonth={selectedMonth}
+          setSelectedMonth={setSelectedMonth}
+          monthOptions={monthOptions}
+          id="schedule-month"
+        />
         <div className="space-y-1">
           <label className="text-sm font-medium" htmlFor="schedule-season">
             Season Type
@@ -118,8 +91,16 @@ export function GamesFilter({
 
       {!isLoadingSchedule && !scheduleError && schedule && (
         <div className="grid gap-4 lg:grid-cols-2 mt-4">
-          <GamesTable title="Previous Games" games={schedule.previous} teamId={teamId} />
-          <GamesTable title="Upcoming Games" games={schedule.upcoming} teamId={teamId} />
+          <GamesTable
+            title="Previous Games"
+            games={schedule.previous}
+            teamId={teamId}
+          />
+          <GamesTable
+            title="Upcoming Games"
+            games={schedule.upcoming}
+            teamId={teamId}
+          />
         </div>
       )}
     </div>

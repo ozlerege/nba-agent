@@ -6,6 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { EmptyState } from "@/components/ui/empty-state";
 import { TeamGame } from "@/lib/api/types";
 import { TeamLogo } from "./team-logo";
 
@@ -18,9 +19,10 @@ interface GamesTableProps {
 export function GamesTable({ title, games, teamId }: GamesTableProps) {
   if (games.length === 0) {
     return (
-      <div className="rounded-lg border p-4 text-sm text-muted-foreground">
-        <strong>{title}:</strong> No games found for the selected filters.
-      </div>
+      <EmptyState
+        title={title}
+        message="No games found for the selected filters."
+      />
     );
   }
 

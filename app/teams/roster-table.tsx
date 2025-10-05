@@ -1,4 +1,4 @@
-import { formatExperience, getHeadshot } from "@/lib/formatters";
+import { formatExperience } from "@/lib/formatters";
 import {
   Table,
   TableBody,
@@ -7,6 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { HeadshotImage } from "@/components/ui/headshot-image";
 import { TeamRosterPlayer } from "@/lib/api/types";
 
 export function RosterTable({ roster }: { roster: TeamRosterPlayer[] }) {
@@ -30,13 +31,10 @@ export function RosterTable({ roster }: { roster: TeamRosterPlayer[] }) {
         {roster.map((player) => (
           <TableRow key={player.id}>
             <TableCell>
-              <img
-                src={getHeadshot(player.id)}
-                alt={`${player.full_name} headshot`}
-                className="rounded-full w-16 h-16 cursor-pointer"
-                onClick={() => {
-                  window.open(getHeadshot(player.id), "_blank");
-                }}
+              <HeadshotImage
+                personId={player.id}
+                personName={player.full_name}
+                size="md"
               />
             </TableCell>
             <TableCell>{player.full_name}</TableCell>

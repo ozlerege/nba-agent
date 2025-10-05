@@ -1,7 +1,6 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
-import { ApiCallPrior } from "@/components/ui/apiCallPrior";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { DataCard } from "@/components/ui/data-card";
 import { TeamsApi } from "@/lib/api/endpoints/teams";
 import { RosterTable } from "../roster-table";
 import { StaffTable } from "../staff-table";
@@ -41,33 +40,22 @@ export function TeamDetail({ teamId }: { teamId: number }) {
 
   return (
     <div>
-      <Card>
-        <CardHeader>
-          <CardTitle>Roster</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ApiCallPrior
-            loading={isLoadingPlayers}
-            error={playersError?.message ?? ""}
-          />
-          {!isLoadingPlayers && !playersError && (
-            <RosterTable roster={players ?? []} />
-          )}
-        </CardContent>
-      </Card>
+      <DataCard
+        title="Roster"
+        isLoading={isLoadingPlayers}
+        error={playersError?.message}
+      >
+        <RosterTable roster={players ?? []} />
+      </DataCard>
 
-      <Card className="mt-4">
-        <CardHeader>
-          <CardTitle>Coaching Staff</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ApiCallPrior
-            loading={isLoadingStaff}
-            error={staffError?.message ?? ""}
-          />
-          {!isLoadingStaff && !staffError && <StaffTable staff={staff ?? []} />}
-        </CardContent>
-      </Card>
+      <DataCard
+        title="Coaching Staff"
+        isLoading={isLoadingStaff}
+        error={staffError?.message}
+        className="mt-4"
+      >
+        <StaffTable staff={staff ?? []} />
+      </DataCard>
     </div>
   );
 }
