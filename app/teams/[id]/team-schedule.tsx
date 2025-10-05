@@ -1,10 +1,4 @@
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
+import { DataCard } from "@/components/ui/data-card";
 import { GamesFilter } from "../games-filter";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -42,11 +36,15 @@ export function TeamSchedule({ teamId }: { teamId: number }) {
     gcTime: 15 * 60 * 1000, // 15 minutes
   });
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Schedule</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
+    <DataCard
+      title="Schedule"
+      footer={
+        <div className="text-xs text-muted-foreground">
+          Data provided by NBA.com
+        </div>
+      }
+    >
+      <div className="space-y-4">
         <GamesFilter
           teamId={teamId}
           selectedSeason={selectedSeason}
@@ -62,10 +60,7 @@ export function TeamSchedule({ teamId }: { teamId: number }) {
           schedule={schedule}
           seasonTypesList={seasonTypesList}
         />
-      </CardContent>
-      <CardFooter className="text-xs text-muted-foreground">
-        Data provided by NBA.com
-      </CardFooter>
-    </Card>
+      </div>
+    </DataCard>
   );
 }
