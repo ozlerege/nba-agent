@@ -1,4 +1,4 @@
-import { formatExperience, getHeadshot } from "@/components/functions";
+import { formatExperience, getHeadshot } from "@/lib/formatters";
 import {
   Table,
   TableBody,

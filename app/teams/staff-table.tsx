@@ -1,4 +1,4 @@
-import { getHeadshot } from "@/components/functions";
+import { getHeadshot } from "@/lib/formatters";
 import {
   Table,
   TableBody,
