@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { TeamsApi } from "@/lib/api/endpoints/teams";
 import { TeamLogo } from "../team-logo";
+import { TeamStats } from "./team-stats";
 
 export function TeamPageSetup() {
   const params = useParams<{ id: string }>();
@@ -39,12 +40,16 @@ export function TeamPageSetup() {
         <TabsList>
           <TabsTrigger value="profile">Profile</TabsTrigger>
           <TabsTrigger value="schedule">Schedule</TabsTrigger>
+          <TabsTrigger value="stats">Stats</TabsTrigger>
         </TabsList>
         <TabsContent value="profile">
           <TeamDetail teamId={teamId ?? 0} />
         </TabsContent>
         <TabsContent value="schedule">
           <TeamSchedule teamId={teamId ?? 0} />
+        </TabsContent>
+        <TabsContent value="stats">
+          <TeamStats teamId={teamId ?? 0} />
         </TabsContent>
       </Tabs>
     </div>

@@ -8,18 +8,6 @@ import { StaffTable } from "../staff-table";
 
 export function TeamDetail({ teamId }: { teamId: number }) {
   const {
-    data: team,
-    isLoading: isLoadingTeam,
-    error: teamError,
-  } = useQuery({
-    queryKey: ["team", teamId],
-    queryFn: () => TeamsApi.getTeam(Number(teamId)),
-    enabled: !!teamId,
-    staleTime: 10 * 60 * 1000, // 10 minutes
-    gcTime: 60 * 60 * 1000, // 60 minutes
-  });
-
-  const {
     data: players,
     isLoading: isLoadingPlayers,
     error: playersError,
@@ -53,7 +41,6 @@ export function TeamDetail({ teamId }: { teamId: number }) {
 
   return (
     <div>
-      <ApiCallPrior loading={isLoadingTeam} error={teamError?.message ?? ""} />
       <Card>
         <CardHeader>
           <CardTitle>Roster</CardTitle>

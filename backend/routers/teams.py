@@ -1,29 +1,20 @@
 from datetime import datetime
-from typing import List, Literal, Optional, Any
+from typing import List, Literal, Optional
 import time
-
+from nba_api.stats.endpoints import teamyearbyyearstats as team_year_by_year_stats
 from fastapi import APIRouter, HTTPException, Query
 from nba_api.stats.static import teams as static_teams
 from nba_api.stats.endpoints import commonteamroster as team_roster
 from nba_api.stats.endpoints import scheduleleaguev2
 from pydantic import BaseModel
 import pandas as pd
-
+from backend.routers.helpers import _parse_game_date, _safe_int, _safe_float
 from backend.constants.team_meta import TEAM_META
+from backend.routers.models import Team, TeamGameScheduleResponse, TeamRosterPlayer, TeamStaff, TeamStats, TeamGame
 
 router = APIRouter(prefix="/api/teams", tags=["teams"])
 
 
-class Team(BaseModel):
-    id: int
-    full_name: str
-    abbreviation: str
-    nickname: str
-    city: str
-    state: str
-    year_founded: int
-    conference: str
-    division: str
 
 
 @router.get("/", summary="List NBA teams", response_model=List[Team])
@@ -75,17 +66,7 @@ async def get_team(id: int):
     )
 
 
-class TeamRosterPlayer(BaseModel):
-    id: int
-    full_name: str
-    number: Optional[str]
-    position: Optional[str]
-    height: Optional[str]
-    weight: Optional[str]
-    birth_date: Optional[str]
-    age: Optional[float]
-    experience: Optional[str]
-    college: Optional[str]
+
 
 
 @router.get("/{id}/players", summary="Get NBA team roster by ID", response_model=List[TeamRosterPlayer])
@@ -113,12 +94,7 @@ async def get_team_players(id: int):
     ]
 
 
-class TeamStaff(BaseModel):
-    id: int
-    full_name: str
-    position: Optional[str]
-    is_assistant: bool
-    coach_type: Optional[str]
+
 
 
 @router.get("/{id}/staff", summary="Get NBA team staff", response_model=List[TeamStaff])
@@ -141,39 +117,7 @@ async def get_team_staff(id: int):
     ]
 
 
-class TeamGame(BaseModel):
-    id: int
-    date: str
-    matchup: Optional[str]
-    is_home: bool
-    status: Literal["completed", "upcoming"]
-    team_score: Optional[int]
-    opponent_score: Optional[int]
-    season: Optional[str]
-    opponent_team_id: Optional[int]
 
-
-class TeamGameScheduleResponse(BaseModel):
-    previous: List[TeamGame]
-    upcoming: List[TeamGame]
-
-
-def _parse_game_date(value: Any) -> datetime:
-    
-    if isinstance(value, datetime):
-        return value
-    ts = getattr(value, "to_pydatetime", None)
-    if callable(ts):
-        return ts()
-    s = str(value)
-    
-    for fmt in ("%m/%d/%Y %H:%M:%S", "%b %d, %Y", "%Y-%m-%d"):
-        try:
-            return datetime.strptime(s, fmt)
-        except ValueError:
-            continue
-   
-    raise ValueError(f"Unsupported date format: {value}")
 
 
 @router.get("/{id}/games", summary="Get NBA team games", response_model=TeamGameScheduleResponse)
@@ -209,7 +153,7 @@ async def get_team_games(
         schedule_endpoint = scheduleleaguev2.ScheduleLeagueV2(season=filtered_season_str)
         all_games_dfs.append(schedule_endpoint.get_data_frames()[0])
 
-        print("All games dfs:", all_games_dfs)
+       
         
        
         if filtered_season_str != current_season_str:
@@ -317,3 +261,59 @@ async def get_team_games(
     )
 
     return TeamGameScheduleResponse(previous=previous_games, upcoming=upcoming_games)
+
+
+@router.get("/{id}/stats", summary="Get NBA team stats by ID", response_model=List[TeamStats] )
+async def get_team_stats(id: int, season: Optional[str] = Query(
+        default=None,
+        description="NBA season in format YYYY-YY (e.g., 2024-25)",
+        pattern=r"^\d{4}-\d{2}$",
+    ),):
+    try:
+        stats_endpoint = team_year_by_year_stats.TeamYearByYearStats(team_id=id)
+        stats_df = stats_endpoint.get_data_frames()[0]
+        stats_df = stats_df[stats_df["YEAR"] == season] if season else stats_df
+    except Exception as exc:  # pragma: no cover - library error handling
+        raise HTTPException(status_code=500, detail=f"Failed to fetch team stats: {exc}") from exc
+
+    return [
+        TeamStats(
+            team_id=_safe_int(row.get("TEAM_ID")),
+            team_city=row.get("TEAM_CITY", ""),
+            team_name=row.get("TEAM_NAME", ""),
+            year=str(row.get("YEAR", "")),
+            gp=_safe_int(row.get("GP")),
+            min=_safe_float(row.get("MIN")),
+            wins=_safe_int(row.get("WINS")),
+            losses=_safe_int(row.get("LOSSES")),
+            win_pct=_safe_float(row.get("WIN_PCT")),
+            conf_rank=_safe_int(row.get("CONF_RANK")),
+            div_rank=_safe_int(row.get("DIV_RANK")),
+            po_wins=_safe_int(row.get("PO_WINS")),
+            po_losses=_safe_int(row.get("PO_LOSSES")),
+            conf_count=_safe_int(row.get("CONF_COUNT")),
+            div_count=_safe_int(row.get("DIV_COUNT")),
+            nba_finals_appearance=_safe_int(row.get("NBA_FINALS_APPEARANCE")),
+            fgm=_safe_int(row.get("FGM")),
+            fga=_safe_int(row.get("FGA")),
+            fg_pct=_safe_float(row.get("FG_PCT")),
+            fg3m=_safe_int(row.get("FG3M")),
+            fg3a=_safe_int(row.get("FG3A")),
+            fg3_pct=_safe_float(row.get("FG3_PCT")),
+            ftm=_safe_int(row.get("FTM")),
+            fta=_safe_int(row.get("FTA")),
+            ft_pct=_safe_float(row.get("FT_PCT")),
+            oreb=_safe_float(row.get("OREB")),
+            dreb=_safe_float(row.get("DREB")),
+            reb=_safe_float(row.get("REB")),
+            ast=_safe_float(row.get("AST")),
+            pf=_safe_float(row.get("PF")),
+            stl=_safe_float(row.get("STL")),
+            tov=_safe_float(row.get("TOV")),
+            blk=_safe_float(row.get("BLK")),
+            pts=_safe_float(row.get("PTS")),
+            pts_rank=_safe_int(row.get("PTS_RANK")),
+            plus_minus=_safe_float(row.get("PLUS_MINUS")),
+        )
+        for _, row in stats_df.iterrows()
+    ]

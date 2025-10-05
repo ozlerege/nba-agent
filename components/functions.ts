@@ -49,3 +49,37 @@ function getTeamIdByAbbr(abbr: string): number {
 export function getHeadshot(personId: number) {
   return `https://cdn.nba.com/headshots/nba/latest/1040x760/${personId}.png`;
 }
+
+export const integerFormatter = new Intl.NumberFormat("en-US");
+export const percentFormatter = new Intl.NumberFormat("en-US", {
+  style: "percent",
+  maximumFractionDigits: 1,
+  minimumFractionDigits: 1,
+});
+export const decimalFormatter = new Intl.NumberFormat("en-US", {
+  maximumFractionDigits: 1,
+  minimumFractionDigits: 1,
+});
+
+export function formatPercent(value: number) {
+  if (!Number.isFinite(value)) return "—";
+  return percentFormatter.format(value);
+}
+
+export function formatDecimal(value: number) {
+  if (!Number.isFinite(value)) return "—";
+  return decimalFormatter.format(value);
+}
+
+export function formatInteger(value: number) {
+  if (!Number.isFinite(value)) return "—";
+  return integerFormatter.format(value);
+}
+
+export function formatPlusMinus(value: number) {
+  if (!Number.isFinite(value)) return "—";
+  const magnitude = decimalFormatter.format(Math.abs(value));
+  if (value > 0) return `+${magnitude}`;
+  if (value < 0) return `-${magnitude}`;
+  return "0.0";
+}
