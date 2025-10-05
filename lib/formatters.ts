@@ -3,6 +3,7 @@ export function formatExperience(experience: string | null) {
   if (experience === "R") return "Rookie";
   return `${experience} years`;
 }
+
 export function getTeamLogoUrl(teamId: number) {
   return `https://cdn.nba.com/logos/nba/${teamId}/global/L/logo.svg`;
 }
@@ -10,6 +11,7 @@ export function getTeamLogoUrl(teamId: number) {
 export function getTeamLogoByAbbreviation(abbreviation: string) {
   return `https://cdn.nba.com/logos/nba/${abbreviation}/global/L/logo.svg`;
 }
+
 function getTeamIdByAbbr(abbr: string): number {
   const map: Record<string, number> = {
     ATL: 1610612737,

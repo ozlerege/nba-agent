@@ -12,7 +12,7 @@ import {
   formatDecimal,
   formatInteger,
   formatPlusMinus,
-} from "@/components/functions";
+} from "@/lib/formatters";
 
 export function TeamStatsTable({ teamStats }: { teamStats: TeamStats[] }) {
   return (

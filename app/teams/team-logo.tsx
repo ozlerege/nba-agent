@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { getTeamLogoByAbbreviation, getTeamLogoUrl } from "@/components/functions";
+import { getTeamLogoByAbbreviation, getTeamLogoUrl } from "@/lib/formatters";
 
 export function TeamLogo({
   teamId,
@@ -19,7 +19,10 @@ export function TeamLogo({
       ? Number(teamId)
       : null;
 
-  const src = idNum !== null ? getTeamLogoUrl(idNum) : getTeamLogoByAbbreviation(String(teamId));
+  const src =
+    idNum !== null
+      ? getTeamLogoUrl(idNum)
+      : getTeamLogoByAbbreviation(String(teamId));
 
   return (
     <Image

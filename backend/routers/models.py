@@ -52,31 +52,32 @@ class TeamGameScheduleResponse(BaseModel):
 
 
 class TeamStats(BaseModel):
-    team_id: int
-    team_city: str
-    team_name: str
+    teamId: int
+    teamCity: str
+    teamName: str
     year: str
+    seasonStartYear: int
     gp: int
     min: float
     wins: int
     losses: int
-    win_pct: float
-    conf_rank: int
-    div_rank: int
-    po_wins: int
-    po_losses: int
-    conf_count: int
-    div_count: int
-    nba_finals_appearance: int
+    winPct: float
+    confRank: int
+    divRank: int
+    poWins: int
+    poLosses: int
+    confCount: int
+    divCount: int
+    nbaFinalsAppearance: int
     fgm: int
     fga: int
-    fg_pct: float
+    fgPct: float
     fg3m: int
     fg3a: int
-    fg3_pct: float
+    fg3Pct: float
     ftm: int
     fta: int
-    ft_pct: float
+    ftPct: float
     oreb: float
     dreb: float
     reb: float
@@ -86,5 +87,5 @@ class TeamStats(BaseModel):
     tov: float
     blk: float
     pts: float
-    pts_rank: int
-    plus_minus: float
+    ptsRank: int
+    plusMinus: float

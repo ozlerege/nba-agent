@@ -9,7 +9,7 @@ from nba_api.stats.endpoints import scheduleleaguev2
 from pydantic import BaseModel
 import pandas as pd
 from backend.routers.helpers import _parse_game_date, _safe_int, _safe_float
-from backend.constants.team_meta import TEAM_META
+# Team metadata moved to frontend lib/enums.ts
 from backend.routers.models import Team, TeamGameScheduleResponse, TeamRosterPlayer, TeamStaff, TeamStats, TeamGame
 
 router = APIRouter(prefix="/api/teams", tags=["teams"])
@@ -21,10 +21,7 @@ router = APIRouter(prefix="/api/teams", tags=["teams"])
 async def list_teams():
     try:
         teams = static_teams.get_teams()
-        for team in teams:
-            meta = TEAM_META.get(team["id"])
-            team["conference"] = meta["conference"] if meta else "Unknown"
-            team["division"] = meta["division"] if meta else "Unknown"
+        # Team metadata (conference/division) will be added on frontend
     except Exception as exc:  # pragma: no cover - library error handling
         raise HTTPException(status_code=500, detail=f"Failed to fetch teams: {exc}") from exc
 
@@ -37,8 +34,8 @@ async def list_teams():
             city=team["city"],
             state=team["state"],
             year_founded=team["year_founded"],
-            conference=team["conference"],
-            division=team["division"],
+            conference="Unknown",  # Will be populated on frontend
+            division="Unknown",    # Will be populated on frontend
         )
         for team in teams
     ]
@@ -48,9 +45,7 @@ async def list_teams():
 async def get_team(id: int):
     try:
         team = static_teams._find_team_name_by_id(id)
-        meta = TEAM_META.get(id)
-        team["conference"] = meta["conference"] if meta else "Unknown"
-        team["division"] = meta["division"] if meta else "Unknown"
+        # Team metadata (conference/division) will be added on frontend
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"Failed to fetch team: {exc}") from exc
     return Team(
@@ -61,8 +56,8 @@ async def get_team(id: int):
         city=team["city"],
         state=team["state"],
         year_founded=team["year_founded"],
-        conference=team["conference"],
-        division=team["division"],
+        conference="Unknown",  # Will be populated on frontend
+        division="Unknown",    # Will be populated on frontend
     )
 
 
@@ -278,31 +273,32 @@ async def get_team_stats(id: int, season: Optional[str] = Query(
 
     return [
         TeamStats(
-            team_id=_safe_int(row.get("TEAM_ID")),
-            team_city=row.get("TEAM_CITY", ""),
-            team_name=row.get("TEAM_NAME", ""),
+            teamId=_safe_int(row.get("TEAM_ID")),
+            teamCity=row.get("TEAM_CITY", ""),
+            teamName=row.get("TEAM_NAME", ""),
             year=str(row.get("YEAR", "")),
+            seasonStartYear=_safe_int(str(row.get("YEAR", ""))[:4]) if row.get("YEAR") else 0,
             gp=_safe_int(row.get("GP")),
             min=_safe_float(row.get("MIN")),
             wins=_safe_int(row.get("WINS")),
             losses=_safe_int(row.get("LOSSES")),
-            win_pct=_safe_float(row.get("WIN_PCT")),
-            conf_rank=_safe_int(row.get("CONF_RANK")),
-            div_rank=_safe_int(row.get("DIV_RANK")),
-            po_wins=_safe_int(row.get("PO_WINS")),
-            po_losses=_safe_int(row.get("PO_LOSSES")),
-            conf_count=_safe_int(row.get("CONF_COUNT")),
-            div_count=_safe_int(row.get("DIV_COUNT")),
-            nba_finals_appearance=_safe_int(row.get("NBA_FINALS_APPEARANCE")),
+            winPct=_safe_float(row.get("WIN_PCT")),
+            confRank=_safe_int(row.get("CONF_RANK")),
+            divRank=_safe_int(row.get("DIV_RANK")),
+            poWins=_safe_int(row.get("PO_WINS")),
+            poLosses=_safe_int(row.get("PO_LOSSES")),
+            confCount=_safe_int(row.get("CONF_COUNT")),
+            divCount=_safe_int(row.get("DIV_COUNT")),
+            nbaFinalsAppearance=_safe_int(row.get("NBA_FINALS_APPEARANCE")),
             fgm=_safe_int(row.get("FGM")),
             fga=_safe_int(row.get("FGA")),
-            fg_pct=_safe_float(row.get("FG_PCT")),
+            fgPct=_safe_float(row.get("FG_PCT")),
             fg3m=_safe_int(row.get("FG3M")),
             fg3a=_safe_int(row.get("FG3A")),
-            fg3_pct=_safe_float(row.get("FG3_PCT")),
+            fg3Pct=_safe_float(row.get("FG3_PCT")),
             ftm=_safe_int(row.get("FTM")),
             fta=_safe_int(row.get("FTA")),
-            ft_pct=_safe_float(row.get("FT_PCT")),
+            ftPct=_safe_float(row.get("FT_PCT")),
             oreb=_safe_float(row.get("OREB")),
             dreb=_safe_float(row.get("DREB")),
             reb=_safe_float(row.get("REB")),
@@ -312,8 +308,8 @@ async def get_team_stats(id: int, season: Optional[str] = Query(
             tov=_safe_float(row.get("TOV")),
             blk=_safe_float(row.get("BLK")),
             pts=_safe_float(row.get("PTS")),
-            pts_rank=_safe_int(row.get("PTS_RANK")),
-            plus_minus=_safe_float(row.get("PLUS_MINUS")),
+            ptsRank=_safe_int(row.get("PTS_RANK")),
+            plusMinus=_safe_float(row.get("PLUS_MINUS")),
         )
         for _, row in stats_df.iterrows()
     ]
