@@ -6,9 +6,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { TeamLogo } from "@/components/ui/team-logo";
 import { Team } from "@/lib/api/types";
 import { useRouter } from "next/navigation";
-import { TeamLogo } from "./team-logo";
 
 export function TeamsTable({ teams }: { teams: Team[] }) {
   const router = useRouter();

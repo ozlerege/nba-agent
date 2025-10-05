@@ -85,3 +85,9 @@ export function formatPlusMinus(value: number) {
   if (value < 0) return `-${magnitude}`;
   return "0.0";
 }
+
+export function formatPerGame(value: number, games: number) {
+  if (!Number.isFinite(value) || !Number.isFinite(games) || games === 0)
+    return "—";
+  return decimalFormatter.format(value / games);
+}
